@@ -2,7 +2,9 @@
 
 #### 项目文件解释
 
-`pages` - web前端
+`pages` - Web前端
+
+- index.html - 主页面
 
 FaceRecoPy - Flask后端
 
