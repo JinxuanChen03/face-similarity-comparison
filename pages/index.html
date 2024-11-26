@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>人脸识别</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+        .uploaded-image {
+            margin-top: 20px;
+            max-width: 100%;
+            display: none; /* 初始状态隐藏图片 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>上传照片并比较明星脸相似度</h1>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" name="photo" id="photoInput" accept="image/*">
+            <button type="submit">上传并分析</button>
+        </form>
+        <div class="result" id="result"></div>
+        <img id="uploadedImage" class="uploaded-image" alt="Uploaded Image">
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const formData = new FormData();
+            const fileInput = document.getElementById('photoInput').files[0];
+            formData.append('photo', fileInput);
+
+            // 在发送请求之前显示上传的图片
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('uploadedImage').src = e.target.result;
+                document.getElementById('uploadedImage').style.display = 'block'; // 显示图片
+            };
+            reader.readAsDataURL(fileInput);
+
+            fetch('http://localhost:5000/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('result').innerText = `错误: ${data.error}`;
+                } else {
+                    let resultText = '最相似的三位明星:\n';
+                    data.forEach((item, index) => {
+                        resultText += `${index + 1}. ${item.name} - 相似度: ${item.similarity}%\n`;
+                    });
+                    document.getElementById('result').innerText = resultText;
+                }
+            })
+            .catch(error => {
+                document.getElementById('result').innerText = `错误: ${error}`;
+            });
+        });
+    </script>
+</body>
+</html>
