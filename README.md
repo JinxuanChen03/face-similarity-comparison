@@ -4,7 +4,7 @@
 
 `pages` - Web前端
 
-- index.html - 主页面
+- `index.html` - 主页面
 
 FaceRecoPy - Flask后端
 
