@@ -6,7 +6,7 @@
 
 - `index.html` - 主页面
 
-FaceRecoPy - Flask后端
+`FaceRecoPy` - Flask后端
 
 - `main.py` - 后端路由
 - `cropping_faces.py` - 截取人脸
